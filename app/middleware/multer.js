@@ -48,11 +48,11 @@ exports.uploadFile = (imageFile) => {
             }
 
             //tidak ada file yang disubmit
-            if (!req.file && !err) {
-                return res.status(400).send({
-                    message: "please select a file to upload"
-                })
-            }
+            // if (!req.file && !err) {
+            //     return res.status(400).send({
+            //         message: "please select a file to upload"
+            //     })
+            // }
 
             // ukuran file melebihi limit
             if (err) {

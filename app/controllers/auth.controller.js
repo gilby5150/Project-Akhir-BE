@@ -9,14 +9,18 @@ var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 
 exports.signup = (req, res) => {
+  let birthdate = new Date()
   // Save User to Database
+  console.log(birthdate, "ini date : ");
   User.create({
     username: req.body.username,
-    birthday:req.body.birthday,
-    gender:req.body.gender,
+    fullname: "-",
+    image: "",
+    birthday: birthdate.toDateString(),
+    gender:"-",
     email: req.body.email,
-    mobile:req.body.mobile,
-    address: req.body.address,
+    mobile:"-",
+    address: "-",
     password: bcrypt.hashSync(req.body.password, 8)
   })
     .then(user => {

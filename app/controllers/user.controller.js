@@ -1,3 +1,4 @@
+const { Sequelize } = require("../models");
 const db = require("../models");
 const User = db.user;
 const Op = db.Sequelize.Op;
@@ -7,7 +8,7 @@ exports.getAllUser = (req, res) => {
   const username = req.query.username;
   var condition = username ? { username: { [Op.iLike]: `%${username}%` } } : null;
 
-  User.findAll({where: condition})
+  User.findAll({ where: condition })
     .then(data => {
       res.send(data);
     })
@@ -24,7 +25,7 @@ exports.getAllUser = (req, res) => {
 exports.findOne = (req, res) => {
   const username = req.params.username;
 
-  User.findOne({where : {username:username}})
+  User.findOne({ where: { username: username } })
     .then(data => {
       if (data) {
         res.send(data);
@@ -42,11 +43,25 @@ exports.findOne = (req, res) => {
 };
 
 // Update a user by the id in the request
-exports.update = (req, res) => {
+exports.update = async(req, res) => {
   const id = req.params.id;
-
-  User.update(req.body, {
-    where: { id: id }
+  let image = ""
+  // console.log(req.file);
+  if (req.file !== undefined) {
+    image = req.file.filename
+  } else {
+    const user = await User.findOne({ where: { id: id } });
+    image = user.image;
+  }
+  User.update({
+    fullname: req.body.fullname,
+    image: image,
+    birthday: req.body.birthday,
+    gender: req.body.gender,
+    email: req.body.email,
+    mobile: req.body.mobile,
+    address: req.body.address,}, 
+    {where: { id: id }
   })
     .then(num => {
       if (num == 1) {

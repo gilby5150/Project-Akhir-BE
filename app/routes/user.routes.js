@@ -3,6 +3,8 @@ module.exports = app => {
 
   var router = require("express").Router();
 
+  const { uploadFile } = require('../middleware/multer')
+
   // Retrieve all users
   router.get("/", users.getAllUser);
 
@@ -13,7 +15,7 @@ module.exports = app => {
   router.get("/:username", users.findOne);
 
   // Update a Tutorial with id
-  router.put("/:id", users.update);
+  router.post("/:id",uploadFile("image"), users.update);
 
   // Delete a Tutorial with id
   router.delete("/:id", users.delete);
