@@ -5,7 +5,7 @@ const sequelize = db.sequelize;
 
 exports.getUserRole = (req, res) => {
   // const userId = +req.params.userId;
-  sequelize.query(`SELECT a.username, a.id, b."roleId", c.name FROM users a 
+  sequelize.query(`SELECT a.username, a.image, a.id, b."roleId", c.name FROM users a 
   INNER JOIN user_roles b ON a.id = b."userId" 
   INNER JOIN roles c ON b."roleId" = c.id  ORDER BY a.id`)
     .then(data => {

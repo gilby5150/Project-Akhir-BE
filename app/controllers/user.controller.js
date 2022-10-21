@@ -60,7 +60,8 @@ exports.update = async(req, res) => {
     gender: req.body.gender,
     email: req.body.email,
     mobile: req.body.mobile,
-    address: req.body.address,}, 
+    address: req.body.address,
+    saldo: req.body.saldo,}, 
     {where: { id: id }
   })
     .then(num => {

@@ -24,6 +24,9 @@ module.exports = (sequelize, Sequelize) => {
     address: {
       type: Sequelize.STRING
     },
+    saldo: {
+      type: Sequelize.FLOAT
+    },
     password: {
       type: Sequelize.STRING
     },

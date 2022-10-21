@@ -1,5 +1,5 @@
 const db = require("../models");
-const Product = db.products;
+const Pembelian = db.pembelian;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Product
@@ -13,7 +13,7 @@ exports.create = (req, res) => {
   }
 
   // Create a Product
-  const product = {
+  const pembelian = {
     productName: req.body.productName,
     image: req.file.filename,
     price: req.body.price,
@@ -25,7 +25,7 @@ exports.create = (req, res) => {
   };
 
   // Save Product in the database
-  Product.create(product)
+  Pembelian.create(product)
     .then(data => {
       res.send(data);
     })
@@ -42,7 +42,7 @@ exports.findAll = (req, res) => {
   const category = req.query.category;
   var condition = category ? { category: { [Op.iLike]: `%${category}%` } } : null;
 
-  Product.findAll({ where: condition })
+  Pembelian.findAll({ where: condition })
     .then(data => {
       res.send(data);
     })
@@ -58,7 +58,7 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
   const id = req.params.id;
 
-  Product.findByPk(id)
+  Pembelian.findByPk(id)
     .then(data => {
       if (data) {
         res.send(data);
@@ -79,7 +79,7 @@ exports.findOne = (req, res) => {
 exports.update = (req, res) => {
   const id = req.params.id;
   console.log(id)
-  Product.update(req.body, {
+  Pembelian.update(req.body, {
     where: { id: id }
   })
     .then(num => {
@@ -104,7 +104,7 @@ exports.update = (req, res) => {
 exports.delete = (req, res) => {
   const id = req.params.id;
 
-  Product.destroy({
+  Pembelian.destroy({
     where: { id: id }
   })
     .then(num => {
@@ -127,7 +127,7 @@ exports.delete = (req, res) => {
 
 // Delete all Product from the database.
 exports.deleteAll = (req, res) => {
-  Product.destroy({
+  Pembelian.destroy({
     where: {},
     truncate: false
   })
@@ -144,7 +144,7 @@ exports.deleteAll = (req, res) => {
 
 // find all published Product
 exports.findAllPublished = (req, res) => {
-  Product.findAll({ where: { published: true } })
+  Pembelian.findAll({ where: { published: true } })
     .then(data => {
       res.send(data);
     })

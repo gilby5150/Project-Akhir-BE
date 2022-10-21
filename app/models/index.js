@@ -27,9 +27,11 @@ db.sequelize = sequelize;
 db.user = require("../models/user.model.js")(sequelize, Sequelize);
 db.role = require("../models/role.model.js")(sequelize, Sequelize);
 db.user_role = require("../models/userRole.model")(sequelize, Sequelize);
+db.products = require("../models/product.model.js")(sequelize, Sequelize);
+db.pembelian = require("../models/pembelian.model.js")(sequelize, Sequelize);
 db.tutorials = require("./tutorial.model.js")(sequelize, Sequelize);
-db.products = require("./product.model.js")(sequelize, Sequelize);
 
+// relasi user dan role untuk auth register
 db.role.belongsToMany(db.user, {
   through: db.user_role,
   foreignKey: "roleId",
@@ -38,6 +40,18 @@ db.role.belongsToMany(db.user, {
 db.user.belongsToMany(db.role, {
   through: db.user_role,
   foreignKey: "userId",
+  otherKey: "roleId"
+});
+
+// relasi user dan product untuk pemebelian
+db.user.belongsToMany(db.products, {
+  through: db.pembelian,
+  foreignKey: "userId",
+  otherKey: "productId"
+});
+db.products.belongsToMany(db.user, {
+  through: db.pembelian,
+  foreignKey: "productId",
   otherKey: "roleId"
 });
 
