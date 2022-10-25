@@ -1,31 +1,29 @@
 const db = require("../models");
 const Pembelian = db.pembelian;
+const Product = db.products;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Product
 exports.create = (req, res) => {
   // Validate request
-  if (!req.body.productName) {
-    res.status(400).send({
-      message: "Content can not be empty!"
-    });
-    return;
-  }
+  // if (!req.body.productName) {
+  //   res.status(400).send({
+  //     message: "Content can not be empty!"
+  //   });
+  //   return;
+  // }
 
   // Create a Product
   const pembelian = {
-    productName: req.body.productName,
-    image: req.file.filename,
-    price: req.body.price,
+    userId: req.body.userId,
+    productId: req.body.productId,
     quantity: req.body.quantity,
-    category: req.body.category,
-    stock: req.body.stock,
-    description: req.body.description,
-    published: req.body.published ? req.body.published : false
+    totalPrice: req.body.totalPrice,
+    payment: req.body.payment,
   };
 
   // Save Product in the database
-  Pembelian.create(product)
+  Pembelian.create(pembelian)
     .then(data => {
       res.send(data);
     })

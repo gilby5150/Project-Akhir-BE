@@ -52,7 +52,7 @@ db.user.belongsToMany(db.products, {
 db.products.belongsToMany(db.user, {
   through: db.pembelian,
   foreignKey: "productId",
-  otherKey: "roleId"
+  otherKey: "userId"
 });
 
 db.ROLES = ["user", "admin", "moderator"];

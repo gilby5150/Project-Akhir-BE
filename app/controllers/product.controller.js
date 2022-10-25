@@ -1,6 +1,7 @@
 const db = require("../models");
 const Product = db.products;
 const Op = db.Sequelize.Op;
+const sequelize = db.sequelize;
 
 // Create and Save a new Product
 exports.create = (req, res) => {
@@ -26,6 +27,7 @@ exports.create = (req, res) => {
 
   // Save Product in the database
   Product.create(product)
+  
     .then(data => {
       res.send(data);
     })
@@ -58,7 +60,19 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
   const id = req.params.id;
 
-  Product.findByPk(id)
+  Product.findByPk(id,
+    // {include: [
+    //   {
+    //     model: User,
+    //     as:'users',
+    //     // atributes: {
+    //     //   exclude: ['username','fullname','image','birthday','gender','email','mobile','address','password','createdAt', 'updatedAt',]
+    //     // },
+    //   }
+    // ]}
+    )
+  // sequelize.query(`SELECT a.*, b."productId", c.saldo FROM products a 
+  // INNER JOIN pembelians b ON a.id = b."userId"`)
     .then(data => {
       if (data) {
         res.send(data);
