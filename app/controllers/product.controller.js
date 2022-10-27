@@ -1,7 +1,7 @@
 const db = require("../models");
 const Product = db.products;
 const Op = db.Sequelize.Op;
-const sequelize = db.sequelize;
+// const sequelize = db.sequelize;
 
 // Create and Save a new Product
 exports.create = (req, res) => {
@@ -60,19 +60,7 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
   const id = req.params.id;
 
-  Product.findByPk(id,
-    // {include: [
-    //   {
-    //     model: User,
-    //     as:'users',
-    //     // atributes: {
-    //     //   exclude: ['username','fullname','image','birthday','gender','email','mobile','address','password','createdAt', 'updatedAt',]
-    //     // },
-    //   }
-    // ]}
-    )
-  // sequelize.query(`SELECT a.*, b."productId", c.saldo FROM products a 
-  // INNER JOIN pembelians b ON a.id = b."userId"`)
+  Product.findByPk(id)
     .then(data => {
       if (data) {
         res.send(data);
@@ -90,10 +78,10 @@ exports.findOne = (req, res) => {
 };
 
 // Update a Product by the id in the request
-exports.update = (req, res) => {
+exports.updateStock = (req, res) => {
   const id = req.params.id;
-  console.log(id)
-  Product.update(req.body, {
+  console.log(id);
+  Product.update({stock : req.body.stock}, {
     where: { id: id }
   })
     .then(num => {

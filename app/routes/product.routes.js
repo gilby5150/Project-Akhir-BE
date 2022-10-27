@@ -18,7 +18,7 @@ module.exports = app => {
     router.get("/:id", products.findOne);
   
     // Update a product with id
-    router.put("/:id", products.update);
+    router.put("/:id", products.updateStock);
   
     // Delete a product with id
     router.delete("/:id", products.delete);

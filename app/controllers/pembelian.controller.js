@@ -1,3 +1,4 @@
+const { where } = require("sequelize");
 const db = require("../models");
 const Pembelian = db.pembelian;
 const Product = db.products;
@@ -5,13 +6,6 @@ const Op = db.Sequelize.Op;
 
 // Create and Save a new Product
 exports.create = (req, res) => {
-  // Validate request
-  // if (!req.body.productName) {
-  //   res.status(400).send({
-  //     message: "Content can not be empty!"
-  //   });
-  //   return;
-  // }
 
   // Create a Product
   const pembelian = {
@@ -21,10 +15,15 @@ exports.create = (req, res) => {
     totalPrice: req.body.totalPrice,
     payment: req.body.payment,
   };
+  const id = req.body.productId;
+  const quantity = req.body.quantity;
 
   // Save Product in the database
   Pembelian.create(pembelian)
-    .then(data => {
+    .then(async data => {
+      const product = await Product.findOne({ where: { id: id } });
+      const stock = product.stock - quantity;
+      Product.update({ stock : stock}, { where: { id: id } });
       res.send(data);
     })
     .catch(err => {

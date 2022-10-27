@@ -29,6 +29,7 @@ db.role = require("../models/role.model.js")(sequelize, Sequelize);
 db.user_role = require("../models/userRole.model")(sequelize, Sequelize);
 db.products = require("../models/product.model.js")(sequelize, Sequelize);
 db.pembelian = require("../models/pembelian.model.js")(sequelize, Sequelize);
+db.cart = require("../models/cart.model.js")(sequelize, Sequelize);
 db.tutorials = require("./tutorial.model.js")(sequelize, Sequelize);
 
 // relasi user dan role untuk auth register
@@ -55,6 +56,18 @@ db.products.belongsToMany(db.user, {
   otherKey: "userId"
 });
 
-db.ROLES = ["user", "admin", "moderator"];
+db.cart.hasMany(db.user, { as: "users" });
+db.cart.belongsTo(db.user, {
+  foreignKey: "userId",
+  as: "userIdFk",
+});
+
+db.cart.hasMany(db.products, { as: "products" });
+db.cart.belongsTo(db.products, {
+  foreignKey: "productId",
+  as: "productIdFk",
+});
+
+db.ROLES = ["user", "admin", "superadmin"];
 
 module.exports = db;
