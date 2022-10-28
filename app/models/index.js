@@ -45,15 +45,16 @@ db.user.belongsToMany(db.role, {
 });
 
 // relasi user dan product untuk pemebelian
-db.user.belongsToMany(db.products, {
-  through: db.pembelian,
+db.pembelian.hasMany(db.user, { as: "users" });
+db.pembelian.belongsTo(db.user, {
   foreignKey: "userId",
-  otherKey: "productId"
+  as: "userIdFk",
 });
-db.products.belongsToMany(db.user, {
-  through: db.pembelian,
+
+db.pembelian.hasMany(db.products, { as: "products" });
+db.pembelian.belongsTo(db.products, {
   foreignKey: "productId",
-  otherKey: "userId"
+  as: "productIdFk",
 });
 
 db.cart.hasMany(db.user, { as: "users" });

@@ -52,7 +52,7 @@ exports.update = async(req, res) => {
   } else {
     const user = await User.findOne({ where: { id: id } });
     image = user.image;
-  }
+  } 
   User.update({
     fullname: req.body.fullname,
     image: image,

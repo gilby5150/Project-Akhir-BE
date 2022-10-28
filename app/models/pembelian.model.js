@@ -20,6 +20,9 @@ module.exports = (sequelize, Sequelize) => {
       payment:{
         type: Sequelize.STRING
       },
+      status:{
+        type: Sequelize.STRING
+      },
     });
   
     return Pembelian;

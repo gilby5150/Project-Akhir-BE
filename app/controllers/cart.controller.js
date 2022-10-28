@@ -3,6 +3,7 @@ const db = require("../models");
 const Cart = db.cart;
 const Product = db.products;
 const Op = db.Sequelize.Op;
+const sequelize = db.sequelize;
 
 // Create and Save a new Cart
 exports.create = async (req, res) => {
@@ -46,32 +47,21 @@ exports.create = async (req, res) => {
 };
 
 // Retrieve all Carts from the database.
+
 exports.findAll = (req, res) => {
-  
-  Cart.findAll({
-  //   include: [
-  //   {
-  //     model: Product,
-  //     as: 'products',
-  //     attributes: { 
-  //       exclude:["createdAt,updatedAt"],
-  //     },
-  //   },
-    
-  // ],
-  attributes: {
-    exclude:["createdAt,updatedAt"]
-  }
-  })
+  // const userId = +req.params.userId;
+  sequelize.query(`SELECT a."productName", a.image ,b.quantity, b."totalPrice" FROM products a 
+  INNER JOIN carts b ON a.id = b."productId"
+  INNER JOIN users c ON b."userId" = c.id ORDER BY a.id`)
     .then(data => {
-      res.send(data);
+      res.json(data[0]);
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving cart."
+          err.message || "Some error occurred while retrieving user."
       });
-    });
+    })
 };
 
 // Find a single Cart with an id
@@ -98,7 +88,6 @@ exports.findOne = (req, res) => {
 // Update a Cart by the id in the request
 exports.update = (req, res) => {
   const id = req.params.id;
-  console.log(id);
   Cart.update({ quantity: req.body.quantity, totalPrice: req.body.totalPrice }, {
     where: { id: id }
   })

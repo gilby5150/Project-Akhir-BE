@@ -2,7 +2,9 @@ const { where } = require("sequelize");
 const db = require("../models");
 const Pembelian = db.pembelian;
 const Product = db.products;
+const Cart = db.cart;
 const Op = db.Sequelize.Op;
+const sequelize = db.sequelize;
 
 // Create and Save a new Product
 exports.create = (req, res) => {
@@ -14,6 +16,7 @@ exports.create = (req, res) => {
     quantity: req.body.quantity,
     totalPrice: req.body.totalPrice,
     payment: req.body.payment,
+    status: req.body.status,
   };
   const id = req.body.productId;
   const quantity = req.body.quantity;
@@ -34,12 +37,44 @@ exports.create = (req, res) => {
     });
 };
 
-// Retrieve all Products from the database.
-exports.findAll = (req, res) => {
-  const category = req.query.category;
-  var condition = category ? { category: { [Op.iLike]: `%${category}%` } } : null;
+exports.createCart = (req, res) => {
 
-  Pembelian.findAll({ where: condition })
+  // Create a Product
+  const pembelianCart = {
+    userId: req.body.userId,
+    productId: req.body.productId,
+    quantity: req.body.quantity,
+    totalPrice: req.body.totalPrice,
+    payment: req.body.payment,
+  };
+  const id = req.body.productId;
+  const quantity = req.body.quantity;
+  const cartId = req.params.cartId;
+
+  // Save Product in the database
+  Pembelian.create(pembelianCart)
+    .then(async data => {
+      const product = await Product.findOne({ where: { id: id } });
+      const stock = product.stock - quantity;
+      Product.update({ stock : stock}, { where: { id: id } });
+      Cart.destroy({ where: { id: cartId } });
+
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while creating the Product."
+      });
+    });
+};
+
+// Retrieve all Products from the database.
+exports.findAll = (res) => {
+  
+  sequelize.query(`SELECT a."productName", a.image ,b.quantity, b."totalPrice", b.payment, b.status FROM products a 
+  INNER JOIN pembelians b ON a.id = b."productId"
+  INNER JOIN users c ON b."userId" = c.id ORDER BY a.id`)
     .then(data => {
       res.send(data);
     })

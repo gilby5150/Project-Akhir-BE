@@ -5,6 +5,8 @@ module.exports = app => {
   
     // Create a new pembelian
     router.post("/", pembelian.create);
+
+    router.post("/cart", pembelian.createCart);
   
     // Retrieve all pembelian
     router.get("/", pembelian.findAll);
