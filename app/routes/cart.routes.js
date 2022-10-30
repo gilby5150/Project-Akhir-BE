@@ -3,23 +3,25 @@ module.exports = app => {
   
     var router = require("express").Router();
   
+    const { morganMiddleware } = require('../middleware/morgan.middleware')
+
     // Create a new cart
-    router.post("/", cart.create);
+    router.post("/",morganMiddleware, cart.create);
   
     // Retrieve all cart
-    router.get("/", cart.findAll);
+    router.get("/",morganMiddleware, cart.findAll);
   
     // Retrieve a single cart with id
-    router.get("/:id", cart.findOne);
+    router.get("/:id",morganMiddleware, cart.findOne);
   
     // Update a cart with id
-    router.put("/:id", cart.update);
+    router.put("/:id",morganMiddleware, cart.update);
   
     // Delete a cart with id
-    router.delete("/:id", cart.delete);
+    router.delete("/:id",morganMiddleware, cart.delete);
   
     // Delete all cart
-    router.delete("/", cart.deleteAll);
+    router.delete("/",morganMiddleware, cart.deleteAll);
   
     app.use("/api/cart", router);
   };

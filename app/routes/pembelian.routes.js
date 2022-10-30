@@ -3,28 +3,30 @@ module.exports = app => {
   
     var router = require("express").Router();
   
-    // Create a new pembelian
-    router.post("/", pembelian.create);
+    const { morganMiddleware } = require('../middleware/morgan.middleware')
 
-    router.post("/cart", pembelian.createCart);
+    // Create a new pembelian
+    router.post("/",morganMiddleware, pembelian.create);
+
+    router.post("/cart",morganMiddleware, pembelian.createCart);
   
     // Retrieve all pembelian
-    router.get("/", pembelian.findAll);
+    router.get("/",morganMiddleware, pembelian.findAll);
   
     // Retrieve all published pembelian
-    router.get("/published", pembelian.findAllPublished);
+    router.get("/published",morganMiddleware, pembelian.findAllPublished);
   
     // Retrieve a single pembelian with id
-    router.get("/:id", pembelian.findOne);
+    router.get("/:id",morganMiddleware, pembelian.findOne);
   
     // Update a pembelian with id
-    router.put("/:id", pembelian.update);
+    router.put("/:id",morganMiddleware, pembelian.update);
   
     // Delete a pembelian with id
-    router.delete("/:id", pembelian.delete);
+    router.delete("/:id",morganMiddleware, pembelian.delete);
   
     // Delete all pembelian
-    router.delete("/", pembelian.deleteAll);
+    router.delete("/",morganMiddleware, pembelian.deleteAll);
   
     app.use("/api/pembelian", router);
   };

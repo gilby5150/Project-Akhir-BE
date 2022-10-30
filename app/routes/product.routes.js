@@ -1,30 +1,30 @@
 module.exports = app => {
     const products = require("../controllers/product.controller.js");
-  
     var router = require("express").Router();
-  
+    
     const { uploadFile } = require('../middleware/multer')
+    const { morganMiddleware } = require('../middleware/morgan.middleware')
 
     // Create a new product
-    router.post("/",uploadFile("image"), products.create);
+    router.post("/",morganMiddleware,uploadFile("image"), products.create);
   
     // Retrieve all products
-    router.get("/", products.findAll);
+    router.get("/",morganMiddleware, products.findAll);
   
     // Retrieve all published products
-    router.get("/published", products.findAllPublished);
+    router.get("/published",morganMiddleware, products.findAllPublished);
   
     // Retrieve a single product with id
-    router.get("/:id", products.findOne);
+    router.get("/:id",morganMiddleware, products.findOne);
   
     // Update a product with id
-    router.put("/:id", products.updateStock);
+    router.put("/:id",morganMiddleware, products.updateStock);
   
     // Delete a product with id
-    router.delete("/:id", products.delete);
+    router.delete("/:id",morganMiddleware, products.delete);
   
     // Delete all products
-    router.delete("/", products.deleteAll);
+    router.delete("/",morganMiddleware, products.deleteAll);
   
     app.use("/api/products", router);
   };

@@ -1,11 +1,12 @@
 const express = require("express");
 const cors = require("cors");
-
 const app = express();
+const db = require("./app/models");
+const Role = db.role;
+// const getLog  = require('./app/controllers/logger.controller');
+// const isAdmin = require( './app/middleware/RoleMiddleware');
 
-// var corsOptions = {
-//   origin: "http://localhost:8081"
-// };
+// app.get('/log',getLog, isAdmin );
 
 app.use(cors());
 
@@ -18,8 +19,6 @@ app.use(express.urlencoded({ extended: true }));
 
 // db.sequelize.sync();
 // force: true will drop the table if it already exists
-const db = require("./app/models");
-const Role = db.role;
 
 db.sequelize.sync = () => {
   initial();
@@ -43,7 +42,7 @@ require('./app/routes/tutorial.routes')(app);
 require('./app/routes/product.routes')(app);
 require('./app/routes/pembelian.routes')(app);
 require('./app/routes/cart.routes')(app);
-
+require('./app/routes/logger.routes')(app);
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
 

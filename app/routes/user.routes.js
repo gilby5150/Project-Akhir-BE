@@ -3,25 +3,26 @@ module.exports = app => {
 
   var router = require("express").Router();
 
+  const { morganMiddleware } = require('../middleware/morgan.middleware')
   const { uploadFile } = require('../middleware/multer')
 
   // Retrieve all users
-  router.get("/", users.getAllUser);
+  router.get("/",morganMiddleware, users.getAllUser);
 
   // Retrieve all published users
-  router.get("/published", users.findAllPublished);
+  router.get("/published",morganMiddleware, users.findAllPublished);
 
   // Retrieve a single Tutorial with id
-  router.get("/:username", users.findOne);
+  router.get("/:username",morganMiddleware, users.findOne);
 
   // Update a Tutorial with id
-  router.post("/:id",uploadFile("image"), users.update);
+  router.post("/:id",morganMiddleware,uploadFile("image"), users.update);
 
   // Delete a Tutorial with id
-  router.delete("/:id", users.delete);
+  router.delete("/:id",morganMiddleware, users.delete);
 
   // Delete all users
-  router.delete("/", users.deleteAll);
+  router.delete("/",morganMiddleware, users.deleteAll);
 
   app.use("/api/users", router);
 };

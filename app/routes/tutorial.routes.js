@@ -3,6 +3,8 @@ module.exports = app => {
   
     var router = require("express").Router();
   
+    const { morganMiddleware } = require('../middleware/morgan.middleware')
+
     // Create a new Tutorial
     router.post("/", tutorials.create);
   
