@@ -3,6 +3,7 @@ const db = require("../models");
 const Pembelian = db.pembelian;
 const Product = db.products;
 const Cart = db.cart;
+const User = db.user;
 const Op = db.Sequelize.Op;
 const sequelize = db.sequelize;
 
@@ -20,12 +21,16 @@ exports.create = (req, res) => {
   };
   const id = req.body.productId;
   const quantity = req.body.quantity;
+  const totalPrice = req.body.totalPrice;
 
   // Save Product in the database
   Pembelian.create(pembelian)
     .then(async data => {
+      const user = await User.findOne({ where: { id: id } });
+      const saldo = user.saldo - totalPrice; 
       const product = await Product.findOne({ where: { id: id } });
       const stock = product.stock - quantity;
+      User.update({saldo : saldo}, {where: {id: id}});
       Product.update({ stock : stock}, { where: { id: id } });
       res.send(data);
     })
@@ -70,13 +75,13 @@ exports.createCart = (req, res) => {
 };
 
 // Retrieve all Products from the database.
-exports.findAll = (res) => {
+exports.findAll = (req, res) => {
   
   sequelize.query(`SELECT a."productName", a.image ,b.quantity, b."totalPrice", b.payment, b.status FROM products a 
   INNER JOIN pembelians b ON a.id = b."productId"
-  INNER JOIN users c ON b."userId" = c.id ORDER BY a.id`)
+  INNER JOIN users c ON b."userId" = c.id ORDER BY b.id DESC`)
     .then(data => {
-      res.send(data);
+      res.json(data[0]);
     })
     .catch(err => {
       res.status(500).send({
